@@ -6,6 +6,7 @@ import {
   collection,
   doc,
   onSnapshot,
+  addDoc,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
@@ -24,6 +25,16 @@ export class NoteListService {
   constructor() {
     this.unsubNotes = this.subNotesList();
     this.unsubTrash = this.subTrashList();
+  }
+
+  async addNote(item: Note) {
+    await addDoc(this.getNotesRef(), item)
+      .catch((err) => {
+        console.log(err);
+      })
+      .then((docRef) => {
+        console.log('document written', docRef?.id);
+      });
   }
 
   subTrashList() {
