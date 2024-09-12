@@ -8,6 +8,7 @@ import {
   onSnapshot,
   addDoc,
   updateDoc,
+  deleteDoc,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
@@ -55,7 +56,7 @@ export class NoteListService {
     }
   }
 
-  async addNote(item: Note) {
+  async addNote(item: Note, colId: "notes" | "trash") {
     await addDoc(this.getNotesRef(), item)
       .catch((err) => {
         console.log(err);
@@ -104,6 +105,12 @@ export class NoteListService {
       content: obj.content || '',
       marked: obj.marked || false,
     };
+  }
+
+  async deleteNote(colId: string, docId: string) {
+    await deleteDoc(this.getSingleDocRef(colId, docId)).catch((err) => {
+      console.log(err);
+    });
   }
 
   getSingleDocRef(colId: string, docId: string) {
